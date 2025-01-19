@@ -1,0 +1,211 @@
+\documentclass[10pt, a4paper]{article}
+\usepackage[utf8x]{inputenx}
+
+% Page Settings
+%--------------------------------------------------------------------
+\usepackage{geometry} % Allows the configuration of document margins
+\geometry{includeheadfoot,a4paper, textwidth=0.87\paperwidth, textheight=0.8\paperheight}
+\usepackage[onehalfspacing]{setspace}
+
+\usepackage{lipsum} % provides lorem ipsum for testing
+
+
+% Font Settings
+%-------------------------------------------------------------------
+\usepackage{lmodern} % http://www.tug.dk/FontCatalogue/latinmodernroman/
+\usepackage[thin]{raleway} % different font for the TikZ header
+\usepackage{url}
+\usepackage{hyperref}
+
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+% Settings for Fancy Headers and Footers
+%-------------------------------------------------------------------
+
+% Settings for TikZ Headers with coloured background
+%-------------------------------------------------------------------
+\usepackage{atveryend}
+\usepackage{lastpage}
+
+\usepackage[usenames, dvipsnames]{color} %  https://de.sharelatex.com/learn/Using_colours_in_LaTeX#!#Reference_guide z.B. \color{RubineRed} - use ColorNames
+\usepackage[dvipsnames]{xcolor}
+\definecolor{CornflowerBlue}{RGB}{100,149,237} %#6495ed (HTML) - define your own colors
+% pick some from here: http://latexcolor.com/
+
+
+% Settings for "normal" headers and footers
+%-------------------------------------------------------------------
+\usepackage{fancyhdr} % http://mirror.easyname.at/ctan/macros/latex/contrib/fancyhdr/fancyhdr.pdf
+\pagestyle{fancy} 
+
+\fancypagestyle{fancy1}{
+\fancyhf{} % clear space at the header and footer so the fancy headers / footers can be placed
+%-------------------------------------------------------------------
+\renewcommand{\headrulewidth}{2pt} % set a head rule of 2pt thickness
+%\renewcommand{\footrulewidth}{1pt} % same would be possible if you wanted a footer rule
+%-------------------------------------------------------------------
+
+% things you might want to access here:  \thesection \thechapter \chaptername \sectionmark \rightmark \leftmark
+% check this for further info: https://en.wikibooks.org/wiki/LaTeX/Customizing_Page_Headers_and_Footers
+
+
+ % puts a small logo on the right side of the HEADER - same goes for the \lhead:
+\rhead{\includegraphics[width=0.04\textwidth]{logo.jpg}}
+\lhead{\footnotesize\textbf{Example citation:} \textsc{Author-Lastname}, Surname: ``Article title'', in: \textsc{Editor} (ed.): \emph{booktitle}, NY 2018. {\textsc{Link:}} \protect\url{http://mylink.com}{  } \lbrack{}\today\rbrack{}.} 
+% you could you \chead to access the center as well
+
+%-------------------------------------------------------------------
+% defines all the FOOTER settings. But in this case, they are conditional: We check if we're on the last page and only print it, if we're not. 
+\rfoot{\ifnum\getpagerefnumber{VeryLastPage}=\value{page}\else\includegraphics[width=0.1\textwidth]{logo.jpg}\fi}
+\lfoot{\ifnum\getpagerefnumber{VeryLastPage}=\value{page}\else{\scriptsize your custom footer text goes here}\fi}
+
+% add the page count in the middle: \thepage gives you the current page, \pageref{LastPage} the total
+\cfoot{\ifnum\getpagerefnumber{VeryLastPage}=\value{page}\else\thepage/\pageref{LastPage}\fi} 
+}
+
+\usepackage{afterpage}
+\fancypagestyle{header}{
+\newgeometry{includeheadfoot,a4paper, textwidth=0.87\paperwidth, textheight=0.7\paperheight, top=3cm, headheight=0cm, headsep=0cm}
+
+\fancyhf{} % clear space at the header and footer again
+%-------------------------------------------------------------------
+\renewcommand{\headrulewidth}{0pt} % get rid of the headrule
+
+%-------------------------------------------------------------------
+% defines all the FOOTER settings to work as above. 
+% We still check if we're on the last page and only print it, if we're not. 
+\rfoot{\ifnum\getpagerefnumber{VeryLastPage}=\value{page}\else\includegraphics[width=0.1\textwidth]{logo.jpg}\fi}
+\lfoot{\ifnum\getpagerefnumber{VeryLastPage}=\value{page}\else{\scriptsize your custom footer text goes here}\fi}
+
+% add the page count in the middle: \thepage gives you the current page, \pageref{LastPage} the total
+\cfoot{\ifnum\getpagerefnumber{VeryLastPage}=\value{page}\else\thepage/\pageref{LastPage}\fi} 
+\afterpage{\restoregeometry}
+}
+
+
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+%-------------------------------------------------------------------
+% packages for the custom header and footer
+\usepackage{tikz}
+\usetikzlibrary{shapes.misc,positioning,backgrounds}
+
+%-------------------------------------------------------------------
+% different last page footer
+\usepackage[pages=some]{background}
+\usepackage{tikzpagenodes}
+\usepackage{pageslts,refcount}
+
+%-------------------------------------------------------------------
+% credit: https://tex.stackexchange.com/questions/120773/footer-on-last-page
+\newcommand{\footercustomlastpage}[3]{% here a command is set
+\backgroundsetup{% from the background package
+  scale=1,angle=0,color=black,%
+  contents={% contents then contain basically the same TikZ picture as I use for the header
+  \tikz[remember picture,overlay]{%
+    \fill[gray!70,ultra thick]%
+    ([yshift=120pt]current page.south west)%
+    rectangle%
+    (current page.south east);%
+    \node[anchor=north west,inner sep=0pt,text width=.75\paperwidth,align=left] at ([yshift=15pt,xshift=50pt]current page.south west|-current page text area.south west) {#1};%
+    \node[anchor=north,inner sep=0pt,text width=.3\paperwidth,align=right] at ([yshift=-5pt,xshift=90pt]current page text area.south) {#2};%
+    \node[anchor=north east,inner sep=0pt,text width=.3\paperwidth,align=right] at ([yshift=-5pt,xshift=-30pt]current page.south east|-current page text area.south east) {#3};%
+  }}}%
+}
+
+%-------------------------------------------------------------------
+% I made a command for this, so you can put the above in an external file
+% and only keep the actual contents of the footer in this main file
+% making a new command would, of course, not been necessary
+%-------------------------------------------------------------------
+\footercustomlastpage{
+\begin{minipage}[t]{0.67\textwidth}
+{\huge Jack Sparrow image credit: Walt Disney. Thanks, mate!}
+\scriptsize\lipsum[56]
+\end{minipage}
+}{
+\includegraphics[width=0.5\textwidth]{jack.jpg}
+}{
+\includegraphics[width=0.4\textwidth]{logo.jpg}
+}
+
+
+%\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+% custom header with background etc
+% this one doesn't necessarily or automatically print on the first page
+% I thought it best to be able to place it manually
+% but this means that head space will not automatically be cleard for it, please you a page break before it
+%-------------------------------------------------------------------
+\newcommand{\bg}[3]{\colorbox{#1}{\bfseries\color{#2}#3}}
+\newcommand{\bgupper}[3]{\colorbox{#1}{\color{#2}\huge\bfseries\MakeUppercase{#3}}}
+
+
+%-------------------------------------------------------------------
+% inspired by: https://www.sharelatex.com/templates/cv-or-resume/fancy-cv
+\newcommand{\header}[7]{
+\thispagestyle{header}
+\tikz[remember picture,overlay] {%
+\node[rectangle, fill=#5, anchor=north, minimum width=\paperwidth, minimum height=5cm](header) at (current page.north){};%
+\node[left=#7 of header.north, anchor=east](name) at (header.east) {\fontfamily{\sfdefault}\selectfont #2};%
+\node[anchor=south east](degree) at (name.north east) {\fontfamily{\sfdefault}\selectfont #1};%
+\node[anchor=north east](descr) at (name.south east) {\fontfamily{\sfdefault}\selectfont #3};%
+\node[right=#6 of header.west, anchor=west](picture) at (header.west) {};%
+\draw[path picture={\node[anchor=center] at (path picture bounding box.center){\includegraphics[height=4.3cm]{#4}} ;}] (picture) circle (2) ;}%
+\vspace{1.5cm}%
+}
+%-------------------------------------------------------------------
+
+
+%-------------------------------------------------------------------
+\newcommand*\initfamily{\usefont{U}{Rothdn}{xl}{n}}
+%-------------------------------------------------------------------
+\pagenumbering{arabic}
+%--------------------------------------------------------------------------------- End footer placement    
+\usepackage{everypage}
+% here we determine that the footer (which really is a background constisting of TikZ picture
+%will be printed on the very last page only
+\AddEverypageHook{\ifnum\getpagerefnumber{VeryLastPage}=\value{page}\clearpage\BgThispage\else\fi}
+%\AfterEndDocument{\clearpage\vfill\fancyhf{}\cfoot{}\rfoot{}\lfoot{}\BgThispage}
+
+
+
+%--------------------------------------------------------------------
+\title{Headers and Footers}
+\author{\LaTeX Ninja}
+\date{September 2018}
+%--------------------------------------------------------------------
+\pagestyle{fancy1}
+\begin{document}
+
+\maketitle\thispagestyle{fancy1}
+
+\section{Introduction}
+\lipsum
+
+\section{Test}
+\lipsum
+
+\newpage
+
+
+
+\header{\bg{white}{black}{Captain}}{\bgupper{gray!20}{red}{Jack Sparrow}
+}{
+\bg{gray!60}{white}{Pirate}
+}{jack.jpg}{JungleGreen}{3.5cm}{2cm}
+
+\lipsum
+
+\lipsum\clearpage
+
+\header{\bg{white}{black}{Captain\phantom{xxxx}//}}{
+{\Huge\input Rothdn.fd \renewcommand*\initfamily{\usefont{U}{Rothdn}{xl}{n}} {\initfamily Jack Sparrow}} }{
+\bg{gray!60}{white}{\Large Pirate\phantom{xxx}//}}{jack.jpg}{Salmon}{3.5cm}{2cm}
+
+\lipsum\lipsum[30-35]
+\clearpage
+
+\header{\bg{white}{black}{it's a}}{{\Huge\bfseries\input Sanremo.fd \renewcommand*\initfamily{\usefont{U}{Sanremo}{xl}{n}} {\initfamily pirate's life} }}{\bg{gray!60}{white}{for me}}{jack.jpg}{CornflowerBlue}{3.5cm}{2cm}
+
+\lipsum\lipsum[30-35]
+
+
+\end{document}

@@ -1,0 +1,300 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+ \usepackage[pscoord]{eso-pic}
+\newcommand{\placetextbox}[3]{
+ \setbox0=\hbox{#3}
+ \AddToShipoutPictureFG*{ \put(\LenToUnit{#1\paperwidth},\LenToUnit{#2\paperheight}){\vtop{{\null}\makebox[0pt][c]{#3}}}
+ }
+ }
+ \placetextbox{.22}{0.055}{\small{979-8-3503-4602-2/22/\$31.00~\copyright 2022 IEEE}}
+
+\usepackage[mathlines,switch]{lineno}
+
+\makeatletter
+
+\let\old@ps@IEEEtitlepagestyle\ps@IEEEtitlepagestyle
+\def\confheader#1{%
+    % for the first page
+    \def\ps@IEEEtitlepagestyle{%
+        \old@ps@IEEEtitlepagestyle%
+        \def\@oddhead{\strut\hfill#1\hfill\strut}%
+        \def\@evenhead{\strut\hfill#1\hfill\strut}%
+    }%
+    \ps@headings%
+}
+\makeatother
+
+\confheader{%
+        \parbox{20cm}{{{2022 25th International Conference on Computer and Information Technology (ICCIT)\\
+17-19 December, Cox’s Bazar, Bangladesh}}}
+}
+
+
+% The preceding line is only needed to identify funding in the first footnote. If that is unneeded, please comment it out.
+\usepackage{fancyhdr}
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+
+\def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
+    T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
+    
+\begin{document}
+
+\title{Identifying Hurricane Damage using Explainable Compact Transformer with Convolutional Embedding}
+
+
+\makeatletter
+\newcommand{\linebreakand}{%
+  \end{@IEEEauthorhalign}
+  \hfill\mbox{}\par
+  \mbox{}\hfill\begin{@IEEEauthorhalign}
+}
+\makeatother
+
+
+
+\author{
+    \hspace{0 cm}\IEEEauthorblockN{Md. Farhadul Islam\IEEEauthorrefmark{1}}
+    \IEEEauthorblockA{\hspace{0 cm}\textit{School of Data and Sciences} \\
+    \textit{\hspace{0 cm}Brac University}\\
+    \hspace{0 cm}Dhaka, Bangladesh \\
+    \hspace{0 cm}md.farhadul.islam@g.bracu.ac.bd}
+    \and
+    \IEEEauthorblockN{Sarah Zabeen\IEEEauthorrefmark{1}\thanks{\IEEEauthorrefmark{1}These authors contributed equally to this work.}}
+    \IEEEauthorblockA{\textit{School of Data and Sciences} \\
+    \textit{Brac University}\\
+    Dhaka, Bangladesh \\
+    sarah.zabeen@g.bracu.ac.bd}
+    \and
+    \IEEEauthorblockN{Mohammad Muhibur Rahman}
+    \IEEEauthorblockA{
+    \textit{School of Data and Sciences}\\
+    \textit{Brac University} \\
+    Dhaka, Bangladesh \\
+    mohammad.muhibur.rahman@g.bracu.ac.bd}
+    \linebreakand
+    \IEEEauthorblockN{Mutasim Husain Khan}
+    \IEEEauthorblockA{
+    \textit{School of Data and Sciences}\\
+    \textit{Brac University} \\
+    Dhaka, Bangladesh \\
+    mutasim.husain.khan@g.bracu.ac.bd}
+    \and
+    \IEEEauthorblockN{Fairoz Nower Khan}
+    \IEEEauthorblockA{
+    \textit{School of Data and Sciences}\\
+    \textit{Brac University} \\
+    Dhaka, Bangladesh \\
+    fairoz.khan@bracu.ac.bd}
+    \and
+    \IEEEauthorblockN{Nabuat Zaman Nahim}
+    \IEEEauthorblockA{
+    \textit{School of Data and Sciences}\\
+    \textit{Brac University} \\
+    Dhaka, Bangladesh \\
+    nabuat.zaman@bracu.ac.bd}
+    \linebreakand
+    \IEEEauthorblockN{Tawhid Anwar}
+    \IEEEauthorblockA{
+    \textit{School of Data and Sciences}\\
+    \textit{Brac University} \\
+    Dhaka, Bangladesh \\
+    tawhid.anwar@bracu.ac.bd}
+    \and
+    \IEEEauthorblockN{Mohammad Kaykobad}
+    \IEEEauthorblockA{
+    \textit{School of Data and Sciences}\\
+    \textit{Brac University} \\
+    Dhaka, Bangladesh \\
+    kaykobad@bracu.ac.bd}
+    
+    
+
+}
+
+
+\maketitle
+
+\begin{abstract}
+Hurricanes are tropical storms that cause substantial loss of human life and property. Damage assessment after a storm is vital for emergency personnel to allocate resources suitably. Typically, a ground survey is conducted to evaluate the extent of the damage by estimating the number of flooded or damaged buildings, which is generally a time-consuming and tedious procedure. Due to the critical nature of the situation at hand, an effective and efficient strategy is necessary for its solution. In this study, we classify satellite images of damaged and normal areas by modifying an explainable Compact Convolutional Transformer (CCT) model to achieve high performance with comparatively less computational requirements. CCT is a Vision Transformer Variant with incorporated convolutions, enabling enhanced inductive bias and eliminating the need for positional embedding (as it is replaced with convolutions). We incorporate LIME, an Explainable Artificial Intelligence (XAI) framework, to offer interpretable and explainable predictions. Our proposed model achieves 98.79\% accuracy, which outperforms other popular and existing models. 
+\end{abstract}
+
+\begin{IEEEkeywords}
+Hurricane Damage, Compact Convolutional Transformers, XAI, Satellite Images, Deep Learning
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+It is incredibly vital for an emergency manager to be situationally aware before responding to a hurricane's impact. Current procedures rely heavily on emergency response staff and volunteers driving around the impacted region (windshield survey) to assess the depth of the damage and destruction. There are a number of ways to measure the devastation caused by hurricanes, including the use of synthetic aperture radar (SAR) images to detect flooding (such as the Dartmouth Flood Observatory) \cite{noauthor_flood_nodate} as well as damage proxy maps to pinpoint regional-level destruction to the physical environment as demonstrated in the Advanced Rapid Imaging and Analysis (ARIA) Project by Caltech and NASA \cite{noauthor_aria_nodate}. Even though synthetic aperture radar (SAR) images are helpful for mapping a wide range of surface characteristics, textures, and roughness patterns, they are more challenging for non-specialists to interpret than optical sensor imaging. Currently, all SAR images’ resolutions are practically insufficient for damage assessment at the building level (as opposed to the regional level). In addition, there are much fewer satellites with SAR sensors than optical sensors, thus gathering timely and regular data might be challenging. Our research emphasizes the use of optical sensor imaging as a more straightforward and readily available way for analyzing storm damage by discriminating between damaged and undamaged buildings. From this point forward, we shall simply refer to images captured by optical sensors as "imagery." A lightweight model in these applications will be very effective in terms of usability\cite{lw1,lw2}. Our study also focuses on lightweight solution for identifying hurricane damage.
+
+Explainable Artificial Intelligence (XAI) systems are created with the purpose of explaining the logic underlying system choices and predictions to end users. The AI explanations, whether on-demand or in the form of a model definition, might aid users in a variety of ways, including increasing the safety of depending on AI judgments \cite{https://doi.org/10.48550/arxiv.1811.11839}. However, XAI approaches generate imprecise outcomes. An explanation is therefore a method for validating the output choice generated by an AI model or algorithm.
+
+Recently, drone and satellite imaging have been implemented in improving situational awareness from a point of high altitude, but the process still requires human visual interpretation of acquired images, which may be time-consuming and often inaccurate in the midst of a rapidly developing crisis. Given this, it's easy to see how computer vision methods may be extremely helpful. Our suggested approach classifies buildings into two categories, "Submerged Building" and "Undamaged Building", using a collection of satellite images. \cite{cao_building_2020}.
+
+In this paper our key contributions are:
+
+\begin{itemize}
+    \item We propose a CCT based explainable framework for hurricane damage identification
+    \item Our approach outperforms other existing work and  popular models
+    \item We also make our predictions interpretable to get out of the blackbox
+    \item The proposed model is much lower in size compared to other CNN models
+\end{itemize}
+
+Fig. \ref{work_fig} represents the full workflow of our study. We will discuss our methodology, dataset preparation, experiments, results.
+
+\begin{figure}[htbp]
+\centering
+\centerline{\includegraphics[width=9.75cm]{fig/Figures (7).png}}
+\caption{Workflow of The Study}
+\label{work_fig}
+\end{figure}
+
+
+\section{Literature Review}
+
+Earlier research mostly focused on determining the severity of hurricanes. The previous study supplied a baseline dataset for hurricane damage identification and employed transfer learning methods to determine hurricane damage to roadways. However, relatively few researchers have utilized satellite photos to evaluate the damage to infrastructures, caused by hurricanes. Satellite pictures and deep learning are being employed in a variety of applications, including disaster response and environmental monitoring. Convolutional Neural Network (CNN) is used for post-processing integrated predictions with satellite information. The IARPA fMoW dataset\cite{8457969} yielded an accuracy of 0.83 and an F1 score of 0.797. Doshi et al.\cite{https://doi.org/10.48550/arxiv.1812.07033} identified the locations worst hit by Hurricane Harvey with the use of a CNN-based change detection model, which achieved an F1 score of 81.2\%. Grids were created using thresholded and clustered satellite photos to assess the damage caused by the tragedy. Dawood et al. \cite{dawood_deep-phurie:_2020} proposed the automated assessment of hurricane strength from satellite photos to be derived using Deep Phurie, a deep CNN model. The root mean squared error (RMSE) obtained was 8.82 knots, which was lower than the prior model's RMSE of 11.2 knots. Dotel et al \cite{inproceedings} utilized the Digital Globe satellite photos of Hurricane Harvey to estimate the damage to roadways using a semantic segmentation NN called U-Net, combined with the ResNet model, where accuracy was found to be 0.845, and the F1-score was 0.675. Robertson et al. \cite{ROBERTSON2019100030} proposed a VGG-16 model to classify images from Hurricane Harvey in 2017 by time-frame as well as severity by applying CNNs and multi-layer perceptrons. Duarte et al. (2018) \cite{isprs-annals-IV-2-89-2018} were able to determine the extent of the damage to the structures, by training with models of varying CNN resolutions, allowing the accuracy to be increased by 4\%. Kaur et al, \cite{kaur_convolutional_2022} proposed a five convolutional layer based model to classify damaged buildings from the satellite images. Their approach obtained 95\% accuracy and 97\% precision. With 1.06 million parameters, the model is one of the most lightweight CNN models for this task.
+
+\section{Research Methodology}
+\label{method} 
+
+\subsection{Compact Convolutional Transformer}
+Compact Convolutional Transformers or in brief, CCT, develop over Compact Vision Transformers (CVT) and take advantage of a convolutional tokenizer leading to the preservation of local information and production of richer tokens. Compared to the primitive ViT, the convolutional tokenizer is more effective in encoding the connection between patches. In the sequel, we go into further detail on the components of the compact transformers. As for CCT model design, the original Vision Transformer \cite{dosovitskiy2021image}, and original Transformer \cite{NIPS2017_3f5ee243} are proposed. The encoder is made up of transformer blocks, each of which has an MLP block and an MHSA layer. The encoder additionally employs dropout, GELU activation, and Layer Normalization. It is considered that the vision transformers are more compact and simpler. Variants with (the minimum number of) 2 layers, 2 heads, and 128-dimensional hidden layers are implemented. Based on the image resolution of the training dataset, the tokenizers are modified. These variations are referred to as ViT-Lite, and although they differ in size, they are largely comparable to ViT in terms of architecture. ViT and almost all general transformer-based classifiers follow BERT \cite{devlin2019bert}, which sends a learnable class or query token across the network before feeding it to the classifier leading to the conversion of the sequential outputs to a single class index. However, in CCT, an attention-based technique which pools over the output token sequence, is leveraged, and hence, unlike the learnable token, the output sequence contains substantial information that includes several parts of the input image, resulting in a more efficient performance. Moreover, the network can correlate data across the input data and weigh the sequential embedding of the transformer encoder's latent space. Finally, Compact Vision Transformer (CVT) is made by substituting SeqPool for the ordinary class token in ViT-Lite. As for the last steps in designing CCT, a straightforward convolutional block is substituted for the patch and embedding, in ViT-Lite and CVT, to create an inductive bias into the model. A single convolution, ReLU activation, and a max pool make up the standard and customary design of this block by which the models have more flexibility than models like ViT since they are no longer restricted to input resolutions that are strictly divisible by the predetermined patch size. The CCT is produced via this convolutional tokenizer, SeqPool, and the transformer encoder. Fig. \ref{cct_fig} shows the CCT methodology.
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=9.3cm]{CCT.png}}
+\caption{Compact Convolutional Transformer}
+\label{cct_fig}
+\end{figure}
+
+\subsection{Explainable AI}
+
+Local Interpretable Model-agnostic Explanation, abbreviated LIME, is a framework for XAI tasks. \cite{ribeiro2016why} can be applied to any model without needing to be familiar with its structure. LIME provides a regional explanation by temporarily exchanging a sophisticated NN for a more straightforward model, like a Ridge regression model. LIME generates a huge number of extreme perturbations by masking off random portions of the original picture and then weighing them depending on their resemblance to the actual image. This is done to ensure that extreme perturbations have limited influence. Learned mapping between perturbations and changes in output label is then applied to the reduced model. The visual description is outputed and then these segments are displayed.
+
+
+
+\subsection{Proposed Methodology}
+Our model is a modified CCT with two convolutional layers and three transformer layers. Each convolutional layer is followed by a layer of group normalization, zero padding, and max pooling. Group Normalization is a normalization layer that aggregates channels and normalizes their characteristics. It does not utilize the batch dimension, and its calculation is batch size independent. Since our batch size is set to 16, group normalization outperforms batch normalization on a consistent basis. Zero Padding is applied to limit the potential of deforming the image's patterns while also accelerating the training process and producing more accurate results. This model will have a one-pixel-thick border around the source picture. Finally, max-pooling is implemented to lower the computational cost. The dropout rate for the dropout layer in the multi-layer perceptron block is 10\%. It aids the model in preventing overfitting by deactivating neurons at a random rate. After customizing the CCT to our specifications, we obtain a result that is significantly more stable. In conclusion, we employ LIME to explain the model's prediction. The model has a total of only 572,866 parameters, resulting in a minimal model with high performance.
+
+\section{Experiment}
+\label{results}
+
+\subsection{Experimental Setup and Training Details}
+The training and testing methods for this experiment are developed using Python libraries such as Tensorflow, and Keras. An NVIDIA RTX 3080TI GPU with 34.1 TeraFLOPS of performance is used to train and assess the models.
+
+We train our model with 40 epochs, where the learning rate is 0.0001 for the Adam optimizer. The batch size is 16 and the image size is $80 \times 80$. 
+
+
+
+
+\subsection{Dataset Preparation}
+
+The Hurricane Harvey dataset \cite{cao_building_2020,sdad-1e56-18} which included 23,000 satellite photos, was utilized for computer-aided damage identification. The optical sensors recorded satellite photos which have a sub-meter resolution and are pre-processed. Atmospheric compensation and orthorectification were part of the pre-processing. In addition to that, pan sharpening was applied. GeoEye-1 is the satellite from which the photographs were obtained. It features a 46 cm panchromatic resolution. The data was initially received from IEEE Dataport.
+
+The process of data normalization is crucial since it is a fundamental step in maintaining the numerical stability of CNN models. Data normalization allows a CNN model to learn rapidly while also ensuring that its gradient descent is stable. Consequently, the pixel values of the photos have been preadjusted to a range of 0 to 1. This further enables the model to remain fair in terms of pixel or feature values that are bigger. The pixel values were multiplied by a factor of 1/255 to facilitate the rescaling. The images are resized to $80 \times 80$. The images were augmented (zoomed and flipped) for robust training and data variation. The train and test ratio of the dataset is 9:1. The validation data is 10\% of the total training dataset. Fig. \ref{data_fig} displays some of the samples from the dataset.
+
+
+\begin{figure}['ht']
+\centerline{\includegraphics[width=8.5cm]{fig/sample_data.jpg}}
+\caption{Sample Data From The Utilized Dataset}
+\label{data_fig}
+\end{figure}
+
+\subsection{Result Analysis and Comparison}
+
+
+Various performance assessment criteria, including precision, sensitivity, loss, and F1 score, are utilized to evaluate and validate the model's performance. Although accuracy is the most popular statistic used in classification tasks, we evaluated our model using other metrics from numerous perspectives. The following equations can be used to represent the various assessment measures employed in this study.
+
+\begin{equation}
+Accuracy = \frac{TP+TN}{TP + TN + FP + FN}
+\end{equation}
+\begin{equation}
+Recall = \frac{TP}{TP + FN}
+\end{equation}
+\begin{equation}
+Precision = \frac{TP}{TP + FP} 
+\end{equation}
+\begin{equation}
+F1\,Score = \frac{2 \times Sensitivity \times Precision}{Sensitivity + Precision}    
+\end{equation}
+Here, TP and TN denote the data points that have been appropriately categorized as true and false, respectively. FP and FN refer to the data items that the model incorrectly categorized as true or false. In addition, we employ binary cross entropy as a loss function.
+
+\begin{figure}['ht']
+\centerline{\includegraphics[width=8cm]{Loss.png}}
+\caption{Training vs Validation Loss Curve}
+\label{loss_fig}
+\end{figure}
+
+\begin{figure}['ht']
+\centerline{\includegraphics[width=8cm]{Accuracy.png}}
+\caption{Training vs Validation Accuracy Curve}
+\label{acc_fig}
+\end{figure}
+
+\begin{table*}['ht']
+\centering
+\caption{Comparison of the proposed model with existing work and popular methods}
+\label{tab}
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+Model                                                         & Number of Parameters  (in Millions) & Accuracy         & Precision        & Recall           & F1 Score         \\ \hline
+VGG16 (Pre-Trained)                                           & 23                       & 96.65\%          & 95.26\%          & 94\%             & 94.62\%          \\ \hline
+ResNet50 (Pre-Trained)                                        & 20                       & 97.14\%          & 96.88\%          & 97.23\%          & 97.05\%          \\ \hline
+InceptionV3 (Pre-Trained)                                     & 21                       & 95.30\%          & 94.33\%          & 93.79\%          & 94.05\%          \\ \hline
+AlexNet                                                       & 58.29                    & 90\%             & 89.5\%           & 88\%             & 88.74\%          \\ \hline
+Cao et al. \cite{cao_building_2020}        & 3.4                      & 97.29\%          & -                & -                & 97.23\%          \\ \hline
+Kaur et al. \cite{kaur_convolutional_2022} & 1.06                     & 95\%             & 97\%             & 96\%             & 96\%             \\ \hline
+\textbf{Our Proposed CCT Model}                               & \textbf{0.57}            & \textbf{98.79\%} & \textbf{98.06\%} & \textbf{99.05\%} & \textbf{98.55\%} \\ \hline
+\end{tabular}
+\end{table*}
+
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=9.5cm]{fig/image (20).png}}
+\caption{XAI Result Sample of Damaged Area Image}
+\label{x1_fig}
+\end{figure}
+
+\begin{figure}[htbp]
+\centerline{\includegraphics[width=9.5cm]{fig/image (21).png}}
+\caption{XAI Result Sample of Not-Damaged Area Image}
+\label{x2_fig}
+\end{figure}
+
+
+
+After training and validating the model, it has been tested using the test set. The model has achieved \textbf{99.11\%} training accuracy, and \textbf{98.79\%} testing accuracy. Our model achieves \textbf{99.05\%} test recall  and \textbf{98.06\%} test precision. The F1 score of the proposed model is \textbf{98.55\%}.
+
+Fig. \ref{loss_fig} and Fig. \ref{acc_fig} represents the loss and accuracy curves respectively. The curves shows that our model has a very good fit, without any under-fitting or over-fitting since, the gap between training and validation is negligible. It also has very low instability of prediction accuracy. The use of dropouts and group normalization made the model stable and reduced the model complexity. These techniques enable neurons to learn more independently.
+
+We employ VGG16, ResNet50, InceptionV3, AlexNet, and two other existing methods for comparison. Here, VGG16, ResNet50, and InceptionV3 have been pre-trained with more than 20 million parameters each. There are 58 million parameters in AlexNet. ResNet50 has the highest accuracy and F1 Score among these models. Our proposed model, however, outperforms all others, including ResNet50. In every evaluation metric, our suggested model surpasses the existing models, as shown in Table. \ref{tab} Additionally, it contains fewer parameters than others.
+
+We get how the model is interpreting the images by using LIME. In Fig. \ref{x1_fig} and Fig. \ref{x2_fig} we see that which features are being considered for the prediction. In Fig. \ref{x1_fig} the gray area represents the segment where the mode could not learn from, or learned very little from. It predicted the image as a damaged class which is also the true class. Similarly, in \ref{x2_fig} the gray area represents the same. The model classifies it as a not damaged class which is also the true class.
+
+The heat-map on the right side of both images illustrates the significance of the features and where the model is learning. The XAI procedure reveals that the mode focuses its predictions on the building and its surroundings. The surrounding region is the most important factor in this classification task; if there is a road, the image will be classified as undamaged; if there is no road or a flood, the image will be classified as damaged.
+
+
+\section{Discussion}
+\label{discussion}
+The compact architecture of the transformer model limited the number of parameters under one million, whereas previous models require at least a million parameters and reaches up to 23 million parameters. The high inductive bias of Convolutions and the self-attention, as well as the greater global comprehension ability of transformers, enable us to obtain high performance with hurricane-damaged images that include location-specific data. High performance allows for a deeper comprehension of the damages.
+We may conclude that the model is highly effective based on our categorization, as the recall rate is quite high. We desire a high recall since we want to identify the affected area as much as possible (avoiding false negative predictions). The more areas we can cover to save, the more we can identify. In this work, precision is less important than recall, yet our task provides excellent performance in both metrics. Moreover, if interpretability is necessary, the XAI representation makes our system far more robust than conventional prediction.
+
+This framework is also highly useful at detecting floods during emergencies with drone-imagery. This procedure is extremely time-efficient, cost-effective, and reliable.
+
+
+\section{Conclusion and Future Work}
+\label{conclution}
+Damage detection following natural disasters is of utmost importance for first responders so that relief may be delivered to those impacted by the hurricane as soon as possible. We propose a lightweight and explainable model which outperforms other prevalent approaches, including previous studies. This approach will solve the problem of identifying flooded areas with a sound efficiency. Convolutional embedding with transformer architecture enabled the suggested model to outperform CNN techniques by a significant margin. Our method also necessitates a lesser number of parameters than previous methods, rendering the entire framework very effective and applicable to real-world applications. For the future expansion of our study, we intend on using drone-captured images to locate flooded or damaged areas where people are trapped. It will be more significant given that not everyone has access to satellite data and it is also difficult to get real time updates. In addition, real-time detection would be highly functional in this task for emergency responders.
+
+
+%\newpage
+\bibliographystyle{IEEEtran}
+\bibliography{reference}
+\vspace{12pt}
+\color{red}
+\end{document}
+%\end{multicols*}
