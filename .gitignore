@@ -1,0 +1,9 @@
+# Windows / Office clutter
+desktop.ini
+Thumbs.db
+~$*
+
+# Google Drive shortcut files (they only open inside Google Drive)
+*.gdoc
+*.gsheet
+*.gslides
